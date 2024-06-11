@@ -12,7 +12,6 @@ This project is a modern Tetris game built using the T3 stack, which includes Ne
   - [Installation](#installation)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [License](#license)
 - [Acknowledgements](#acknowledgements)
 
 ## Project Overview
@@ -52,7 +51,7 @@ Ensure you have the following software installed on your local development machi
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/yourusername/tetris-game.git
+   git clone https://github.com/yourusername/tetris.git
    cd tetris-game
    ```
 
@@ -98,10 +97,6 @@ Contributions are welcome! Please follow these steps to contribute:
 
 Please ensure your code follows the project's coding guidelines and includes relevant tests.
 
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
-
 ## Acknowledgements
 
 - [Babylon.js Documentation](https://doc.babylonjs.com/)
@@ -110,7 +105,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [TRPC Documentation](https://trpc.io/docs)
 - [React Query Documentation](https://react-query.tanstack.com/)
 - [ShadCN Documentation](https://shadcn.dev/docs)
-
----
-
-Feel free to replace placeholder text (e.g., repository URLs) with actual information specific to your project. This README should provide a comprehensive overview and guide for anyone interested in understanding, using, or contributing to your Tetris game project.
