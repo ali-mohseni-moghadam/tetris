@@ -14,28 +14,22 @@ const createQueryClient = () => new QueryClient();
 let clientQueryClientSingleton: QueryClient | undefined = undefined;
 const getQueryClient = () => {
   if (typeof window === "undefined") {
-    // Server: always make a new query client
     return createQueryClient();
   }
-  // Browser: use singleton pattern to keep the same query client
   return (clientQueryClientSingleton ??= createQueryClient());
 };
 
 export const api = createTRPCReact<AppRouter>();
 
-/**
- * Inference helper for inputs.
- *
- * @example type HelloInput = RouterInputs['example']['hello']
- */
 export type RouterInputs = inferRouterInputs<AppRouter>;
 
-/**
- * Inference helper for outputs.
- *
- * @example type HelloOutput = RouterOutputs['example']['hello']
- */
 export type RouterOutputs = inferRouterOutputs<AppRouter>;
+
+let token: string;
+
+export const setToken = (newToken: string) => {
+  token = newToken;
+};
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
@@ -52,13 +46,16 @@ export function TRPCReactProvider(props: { children: React.ReactNode }) {
           transformer: SuperJSON,
           url: getBaseUrl() + "/api/trpc",
           headers: () => {
-            const headers = new Headers();
-            headers.set("x-trpc-source", "nextjs-react");
-            return headers;
+            // const headers = new Headers();
+            // headers.set("x-trpc-source", "nextjs-react");
+            // return headers;
+            return {
+              Authorization: `Bearer ${token}`,
+            };
           },
         }),
       ],
-    })
+    }),
   );
 
   return (
