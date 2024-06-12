@@ -1,10 +1,10 @@
-import { CreateUser } from "./_components/create-user";
+import { SignUp } from "./_components/sign-up";
 
 export default async function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] p-10 text-white">
+    <main className="containerDiv">
       <h1 className="mb-10">| Welcom to Tetris Game |</h1>
-      <CreateUser />
+      <SignUp />
     </main>
   );
 }
