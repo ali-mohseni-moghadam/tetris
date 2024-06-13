@@ -1,9 +1,9 @@
-import SignIn from "../_components/sign-in";
+import { SignUp } from "../_components/sign-up";
 
 function Page() {
   return (
     <div className="containerDiv">
-      <SignIn />
+      <SignUp />
     </div>
   );
 }
