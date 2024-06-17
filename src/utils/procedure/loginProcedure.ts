@@ -4,7 +4,7 @@ import { publicProcedure } from "~/server/api/trpc";
 import { db } from "~/server/db";
 import { verifyPassword } from "../auth";
 import { sign } from "jsonwebtoken";
-import { serialize } from "cookie";
+import { cookies } from "next/headers";
 
 export const loginProcedure = publicProcedure
   .input(
@@ -13,8 +13,9 @@ export const loginProcedure = publicProcedure
       password: z.string().min(6),
     }),
   )
-  .mutation(async ({ input, ctx }) => {
+  .mutation(async ({ input }) => {
     const { email, password } = input;
+    const expiresIn = 24 * 60 * 60;
 
     if (!email || !password) {
       throw new TRPCError({
@@ -46,21 +47,17 @@ export const loginProcedure = publicProcedure
     }
 
     const token = sign({ email }, process.env.SECRET_KEY!, {
-      expiresIn: 6 * 60 * 60,
+      expiresIn: expiresIn,
     });
 
-    const cookie = new Headers();
+    cookies().set("Cookie", token, {
+      httpOnly: true,
+      maxAge: expiresIn,
+      path: "/",
+    });
 
-    cookie.set(
-      "Set-Cookie",
-      serialize("token", token, {
-        httpOnly: true,
-        maxAge: 1 * 60 * 60,
-        path: "/",
-      }),
-    );
-
-    console.log(ctx.headers.getSetCookie());
-
-    return true;
+    return {
+      status: true,
+      token,
+    };
   });

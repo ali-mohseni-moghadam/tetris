@@ -1,28 +1,36 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { api } from "~/trpc/react";
+import { clientApi } from "~/trpc/react";
 
 function SignIn() {
-  const router = useRouter();
   const [loginData, setUserData] = useState({
     email: "",
     password: "",
   });
 
-  const { data, error, isPending, mutate } = api.user.login.useMutation({
+  const { error, isPending, mutate } = clientApi.user.login.useMutation({
     onSuccess: (data) => {
       setUserData({
         email: "",
         password: "",
       });
-      if (data) router.push("/game");
+      if (data) {
+        window.location.href = "/game";
+        return null;
+      }
     },
     onError: (error) => {
       console.error("Failed to login:", error);
     },
   });
+
+  const { data } = clientApi.user.isAuth.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+  if (data) {
+    window.location.href = "/game";
+  }
 
   const changeHnadler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -60,7 +68,7 @@ function SignIn() {
       <button
         onClick={handleSubmit}
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        // disabled={createUser.isPending}
+        disabled={isPending}
       >
         {isPending ? "Loading..." : "Login"}
       </button>

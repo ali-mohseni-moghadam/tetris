@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { UserState } from "~/utils/types/type";
-import { api } from "~/trpc/react";
+import { clientApi } from "~/trpc/react";
 import Link from "next/link";
 
 export function SignUp() {
@@ -14,7 +14,7 @@ export function SignUp() {
     password: "",
   });
 
-  const createUser = api.user.createUser.useMutation({
+  const createUser = clientApi.user.createUser.useMutation({
     onSuccess: () => {
       setUserData({
         name: "",
@@ -27,6 +27,13 @@ export function SignUp() {
       console.log(`Failed to create user`, error);
     },
   });
+
+  const { data } = clientApi.user.isAuth.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
+  if (data) {
+    window.location.href = "/game";
+  }
 
   const changeHnadler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -71,7 +78,7 @@ export function SignUp() {
       <button
         onClick={handleSubmit}
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        // disabled={createUser.isPending}
+        disabled={createUser.isPending}
       >
         {createUser.isPending ? "Creating" : "Sign Up"}
       </button>
