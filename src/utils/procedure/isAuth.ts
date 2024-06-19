@@ -5,7 +5,6 @@ import { verifyToken } from "../auth";
 
 export const isAuthProcedure = publicProcedure.query(async () => {
   const token = cookies().get("Cookie")?.value;
-  console.log(token);
 
   if (!token) {
     throw new TRPCError({

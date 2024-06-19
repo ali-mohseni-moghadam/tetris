@@ -45,5 +45,5 @@ export const createProcedure = publicProcedure
     });
 
     console.log(user);
-    return { success: true, user };
+    return { success: true };
   });

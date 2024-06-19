@@ -1,8 +1,8 @@
-import GameScene from "../_components/game-scene";
+import GameScene from "../../components/Home/game-scene";
 
 function Game() {
   return (
-    <div className="containerDiv">
+    <div className="min-h-screen bg-gray-900 text-white">
       <GameScene />
     </div>
   );

@@ -57,7 +57,6 @@ export const loginProcedure = publicProcedure
     });
 
     return {
-      status: true,
-      token,
+      success: true,
     };
   });

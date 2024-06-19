@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import type { UserState } from "~/utils/types/type";
+import type { UserState } from "~/types/type";
 import { clientApi } from "~/trpc/react";
 import Link from "next/link";
 
@@ -28,12 +28,16 @@ export function SignUp() {
     },
   });
 
-  const { data } = clientApi.user.isAuth.useQuery(undefined, {
+  const { isSuccess, isLoading } = clientApi.user.isAuth.useQuery(undefined, {
+    retry: 0,
     refetchOnWindowFocus: false,
   });
-  if (data) {
-    window.location.href = "/game";
-  }
+
+  useEffect(() => {
+    if (isSuccess) {
+      router.push("/game");
+    }
+  }, [isSuccess, router]);
 
   const changeHnadler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const name = event.target.name;
@@ -46,16 +50,26 @@ export function SignUp() {
     createUser.mutate(userData);
   };
 
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
+        Loading...
+      </div>
+    );
+  }
+
   return (
-    <div className="mb-20 flex flex-col gap-2">
-      <h2 className="mb-4 text-center">Sign Up Form</h2>
+    <div className=" mb-20 flex flex-col gap-2 rounded border border-gray-700 bg-gray-800/50 p-5 backdrop-blur-md">
+      <h2 className="mb-4 text-center text-2xl font-bold text-gray-200">
+        Sign Up Form
+      </h2>
       <input
         type="text"
         placeholder="Name"
         name="name"
         value={userData.name}
         onChange={changeHnadler}
-        className="w-full rounded-full px-4 py-2 text-black"
+        className="w-full rounded-full bg-gray-700 px-4 py-2 text-white placeholder-gray-400 focus:outline-gray-700"
         required
       />
       <input
@@ -64,7 +78,7 @@ export function SignUp() {
         name="email"
         value={userData.email}
         onChange={changeHnadler}
-        className="w-full rounded-full px-4 py-2 text-black"
+        className="w-full rounded-full bg-gray-700 px-4 py-2 text-white placeholder-gray-400 focus:outline-gray-700"
         required
       />
       <input
@@ -73,20 +87,20 @@ export function SignUp() {
         name="password"
         value={userData.password}
         onChange={changeHnadler}
-        className="w-full rounded-full px-4 py-2 text-black"
+        className="mb-4 w-full rounded-full bg-gray-700 px-4 py-2 text-white placeholder-gray-400 focus:outline-gray-700"
       />
       <button
         onClick={handleSubmit}
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
+        className="rounded-full bg-violet-700 px-10 py-3 font-semibold text-white transition duration-500 hover:bg-violet-900"
         disabled={createUser.isPending}
       >
-        {createUser.isPending ? "Creating" : "Sign Up"}
+        {createUser.isPending ? "Creating..." : "Sign Up"}
       </button>
       <div className="mt-1 flex justify-between p-2.5">
-        <span>Or If You Have Account</span>
+        <span>If You Have an Account</span>
         <button>
           <Link
-            className="rounded border p-2 transition duration-300 hover:bg-white/5 hover:text-orange-500"
+            className="rounded border border-gray-600 bg-gray-700 p-2 transition duration-300 hover:bg-gray-900 hover:text-orange-500"
             href="/signin"
           >
             Login
