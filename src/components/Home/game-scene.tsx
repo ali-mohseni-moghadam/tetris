@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { clientApi } from "~/trpc/react";
 import { deleteToken } from "~/utils/cookie";
+import GameReact from "../GameUi/Game";
 
 const GameScene: React.FC = () => {
   const router = useRouter();
@@ -41,7 +42,7 @@ const GameScene: React.FC = () => {
   }
 
   return (
-    <div>
+    <div className="h-screen overflow-hidden">
       <nav className=" flex items-center justify-between border-b border-gray-700 bg-gray-800/50 px-6 py-4 backdrop-blur-md">
         <div>
           <p className="font-bold">User</p>
@@ -54,9 +55,9 @@ const GameScene: React.FC = () => {
           Log Out
         </button>
       </nav>
-      <main className="flex flex-col items-center justify-center p-8">
-        <h2 className="mb-4 text-3xl font-bold text-gray-200">Game Scene</h2>
-        {/* Babylon.js ground or other content will be placed here */}
+      <main className="flex flex-col items-center justify-center">
+        {/* <h2 className="mb-4 text-3xl font-bold text-gray-200">Game Scene</h2> */}
+        <GameReact />
       </main>
     </div>
   );
